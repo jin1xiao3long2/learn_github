@@ -1,0 +1,113 @@
+#pragma once
+
+#include <iostream>
+#include <string>
+#include <algorithm> //std::sort函数的头文件
+#include "my_List.hpp"
+#include <vector>
+
+using std::string;
+using std::cout;
+using std::endl;
+using std::vector;
+
+class huffmantree final{
+
+private:
+
+    class huffmantreenode final{
+
+    private:
+
+    int huffWeight = 0;//权重
+    huffmantreenode *parent = nullptr, *leftchild = nullptr, *rightchild = nullptr;
+    char huffCharacter;
+    bool is_Leafcharnode = false;
+
+    public:
+
+    huffmantreenode() = default;
+
+    huffmantreenode(char character, int weight, bool isleafnode ,huffmantreenode *p = nullptr, 
+                    huffmantreenode *lchild = nullptr,huffmantreenode *rchild = nullptr):
+                    huffCharacter(character), huffWeight(weight), is_Leafcharnode(isleafnode), parent(p),
+                    leftchild(lchild), rightchild(rchild){};
+
+    
+
+    int getWeight() const
+    {
+        return this->huffWeight;
+    }
+
+
+    void show()
+    {
+        std::cout << this->huffWeight << "  " << this->huffCharacter;
+        if(is_Leafcharnode)
+        {
+            std::cout << "this is a leafcode ";
+        }
+        std::cout << std::endl;
+    }
+    };
+
+    vector<huffmantreenode *> VectorTree;
+
+    bool cmp(const huffmantreenode *node1, const huffmantreenode *node2)
+    {
+        return node1->getWeight() < node2->getWeight();
+    }
+
+    bool cmp1(int i, int j)
+    {
+        return i>j; 
+    }
+
+    void createhuffmantree(char *ch, int *weight, int num)
+    {
+        huffmantreenode *tmpNode = nullptr;
+        for(int i = 0; i < num; i++)
+        {
+            std::cout << ch[i] << " 123  " << weight[i] << std::endl;
+            tmpNode = new huffmantreenode(ch[i],weight[i],true);
+            VectorTree.push_back(tmpNode);
+            tmpNode = nullptr;
+        }
+        //std::sort(VectorTree.begin(),VectorTree.end(),cmp);
+        for(int i = 0; i < num-1; i++)
+        {
+            
+        }
+        int test[num];
+        for(int i = 0; i < num; i++)
+        {
+                test[i] = VectorTree[i]->getWeight();
+        }
+        std::sort(test,test+num,cmp1);//无法运行
+        for(int i = 0; i < num; i++)
+        {
+            std::cout<<test[i]<<"test";
+        }
+        //std::sort(VectorTree.begin(),VectorTree.end(),cmp);
+        
+    }
+
+public:
+
+    huffmantree(char *ch, int *weight, int num)
+    {
+        createhuffmantree(ch, weight, num);
+        for(int i = 0; i < num; i++)
+        {
+            VectorTree[i]->show();
+        }
+        std::cout << "iterator " << (*VectorTree.begin())->getWeight() << std::endl;
+    }
+    ~huffmantree() = default;
+    string Encode(char ch);
+
+    //复制函数
+    //赋值函数
+    
+};
